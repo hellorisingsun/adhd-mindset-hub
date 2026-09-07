@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Premium ADHD Mindset Hub</title>
+    <style>
+        :root {
+            /* Calming Midnight Slate Sensory Palette */
+            --bg-color: #121214;          /* Deep matte charcoal (ultra low-glare) */
+            --container-bg: #1a1a1e;      /* Soft midnight tile frame */
+            --text-main: #e2e2e5;         /* Soft ambient grey text */
+            --text-muted: #787880;        /* Muted storm grey */
+            --accent-green: #86efac;      /* Soft soothing sage green */
+            --accent-lavender: #c084fc;   /* Calming light lavender accent */
+            --border-ui: #2d2d34;         /* Low-contrast outline lattice */
+        }
+
+        body {
+            margin: 0;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 1.5rem 0;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 410px;
+            background: var(--container-bg);
+            padding: 1.8rem;
+            border-radius: 28px;
+            border: 1px solid var(--border-ui);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.4);
+            position: relative;
+            box-sizing: border-box;
+        }
+
+        h1 { font-size: 1.25rem; font-weight: 300; letter-spacing: 3px; margin-bottom: 0.3rem; text-align: center; text-transform: uppercase; color: var(--accent-lavender); }
+        .subtitle { font-size: 0.8rem; color: var(--text-muted); text-align: center; margin-bottom: 1.5rem; font-style: italic; }
+
+        /* Disappearing Ink Brain Dump Input Module */
+        .dump-box {
+            background: #141416;
+            border-radius: 20px;
+            padding: 1.2rem;
+            border: 1px solid var(--border-ui);
+            margin-bottom: 1.5rem;
+        }
+        .dump-box label { font-size: 0.72rem; text-transform: uppercase; font-weight: bold; color: var(--text-muted); letter-spacing: 1px; display: block; margin-bottom: 8px; }
+        
+        textarea {
+            width: 100%;
+            height: 90px;
+            background: transparent;
+            border: none;
+            color: var(--text-main);
+            font-size: 0.95rem;
+            line-height: 1.5;
+            resize: none;
+            outline: none;
+            padding: 0;
+            font-family: inherit;
+            box-sizing: border-box;
+        }
+        
+        .wipe-btn {
+            background: transparent;
+            border: 1px dashed #ef4444;
+            color: #f87171;
+            padding: 0.5rem;
+            font-size: 0.75rem;
+            font-weight: bold;
+            border-radius: 10px;
+            width: 100%;
+            cursor: pointer;
+            letter-spacing: 0.5px;
+            margin-top: 8px;
+            transition: all 0.2s ease;
+        }
+        .wipe-btn:hover { background: rgba(239, 68, 68, 0.08); }
+
+        .accordion-item {
+            background: #141416;
+            border: 1px solid var(--border-ui);
+            border-radius: 16px;
+            margin-bottom: 10px;
+            overflow: hidden;
+        }
+
+        .accordion-header {
+            width: 100%;
+            background: transparent;
+            border: none;
+            padding: 1.1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            outline: none;
+        }
+        .header-title { font-size: 0.95rem; font-weight: 500; color: var(--text-main); display: flex; align-items: center; gap: 8px; }
+        .header-status { font-size: 0.72rem; color: var(--text-muted); font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px; }
+
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            background: rgba(0, 0, 0, 0.1);
+            padding: 0 1.1rem;
+        }
+
+        .task-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.9rem 0;
+            border-bottom: 1px solid var(--border-ui);
+        }
+        .task-row:last-child { border-bottom: none; }
+        .task-name { font-size: 0.95rem; color: var(--text-main); transition: all 0.25s ease; }
+
+        .check-circle {
+            width: 24px;
+            height: 24px;
+            border: 2px solid var(--border-ui);
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            color: transparent;
+            transition: all 0.2s ease;
+        }
+
+        .task-row.done .check-circle { background: var(--accent-green); border-color: var(--accent-green); color: #121214; font-weight: bold; }
+        .task-row.done .task-name { text-decoration: line-through; color: var(--text-muted); }
+
+        .reset-text { font-size: 0.7rem; color: var(--text-muted); text-align: center; margin-top: 1.5rem; letter-spacing: 0.3px; }
+        .gate-screen { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-color); border-radius: 28px; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 100; padding: 2rem; box-sizing: border-box; }
+        .gate-screen input[type="password"] { background: #000; border: 1px solid var(--border-ui); color: #fff; padding: 0.7rem; font-size: 0.9rem; border-radius: 10px; outline: none; width: 100%; text-align: center; margin-bottom: 1rem; }
+        .verify-btn { background: var(--accent-lavender); color: #121214; border: none; padding: 0.7rem; font-size: 0.9rem; border-radius: 22px; font-weight: bold; width: 100%; cursor: pointer; }
+        .etsy-link { display: inline-block; margin-top: 1.5rem; font-size: 0.75rem; color: var(--text-muted); text-decoration: underline; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- Secure Access Lock Gate -->
+        <div id="authGate" class="gate-screen">
+            <h2 style="font-weight: 300; letter-spacing: 1px; font-size: 1.1rem; margin-bottom: 0.5rem; color: var(--accent-lavender);">HUB VERIFICATION</h2>
+            <p style="font-size: 0.8rem; color: var(--text-muted); text-align: center; margin-bottom: 1.5rem; line-height: 1.4;">Please enter your personal license access key found inside your Etsy transaction purchase manual.</p>
+            <input type="password" id="passKey" placeholder="Enter Access Key...">
+            <button id="unlockBtn" class="verify-btn">UNLOCK SLATE</button>
+            <div id="gateError" style="color: #cc5a5a; font-size: 0.8rem; margin-top: 1rem; visibility: hidden;">Invalid Key. Check spelling.</div>
+            <a href="https://etsy.com" target="_blank" class="etsy-link">🛍️ Purchase License Key at Our Etsy Shop</a>
+        </div>
+
+        <!-- Protected Interactive Workboard Layout -->
+        <div id="appInterface" style="opacity: 0.1; pointer-events: none;">
+            <h1>Mindset Hub</h1>
+            <div class="subtitle">Low-friction routine builder & clear slate</div>
+
+            <!-- Disappearing Ink Brain Dump Text Field Module -->
+            <div class="dump-box">
+                <label>Brain Dump Terminal</label>
+                <textarea id="brainDumpArea" placeholder="Unload your spinning thoughts, anxieties, or tasks here instantly to get them out of your head..."></textarea>
+                <button class="wipe-btn" onclick="wipeBrainDump()">🚀 WIPE CEREBRAL SLATE</button>
+            </div>
+
+            <!-- Accordion Routine Category Container Block Wrapper -->
+            <div id="routineAccordion">
+                
+                <!-- Morning Segment Row Block -->
+                <div class="accordion-item">
+                    <button class="accordion-header" onclick="toggleAccordion('content1')">
+                        <span class="header-title">🌅 Morning Routine</span>
+                        <span class="header-status" id="status1">Closed</span>
+                    </button>
+                    <div id="content1" class="accordion-content">
+                        <div class="task-row" id="t1"><span class="task-name">Hydrate & Morning Sunlight</span><div class="check-circle" onclick="toggleTask('t1')">✓</div></div>
+                        <div class="task-row" id="t2"><span class="task-name">Take Daily Dose/Regimen</span><div class="check-circle" onclick="toggleTask('t2')">✓</div></div>
+                        <div class="task-row" id="t3"><span class="task-name">Review Top 3 Focus Priorities</span><div class="check-circle" onclick="toggleTask('t3')">✓</div></div>
+                    </div>
+                </div>
+
+                <!-- Midday Segment Row Block -->
+                <div class="accordion-item">
+                    <button class="accordion-header" onclick="toggleAccordion('content2')">
+                        <span class="header-title">☀️ Midday Routine</span>
+                        <span class="header-status" id="status2">Closed</span>
+                    </button>
+                    <div id="content2" class="accordion-content">
+                        <div class="task-row" id="t4"><span class="task-name">Screen Break / Somatic Stretch</span><div class="check-circle" onclick="toggleTask('t4')">✓</div></div>
+                        <div class="task-row" id="t5"><span class="task-name">Nutritious Refuel & Hydration</span><div class="check-circle" onclick="toggleTask('t5')">✓</div></div>
+                    </div>
+                </div>
+
+                <!-- Night Segment Row Block -->
+                <div class="accordion-item">
+                    <button class="accordion-header" onclick="toggleAccordion('content3')">
+                        <span class="header-title">🌙 Evening Routine</span>
+                        <span class="header-status" id="status3">Closed</span>
+                    </button>
+                    <div id="content3" class="accordion-content">
+                        <div class="task-row" id="t6"><span class="task-name">Digital Sundown / Dim Screens</span><div class="check-circle" onclick="toggleTask('t6')">✓</div></div>
+                        <div class="task-row" id="t7"><span class="task-name">Clear Workspace & Reset Desk</span><div class="check-circle" onclick="toggleTask('t7')">✓</div></div>
+                        <div class="task-row" id="t8"><span class="task-name">Mindful Breathing / Wind Down</span><div class="check-circle" onclick="toggleTask('t8')">✓</div></div>
+                    </div>
+                </div>
+
+            </div>
+
+            <p class="reset-text">🌱 Notes and tasks save automatically. Chores reset fresh past midnight.</p>
+        </div>
+    </div>
+    <script>
+        const authGate = document.getElementById('authGate'), appInterface = document.getElementById('appInterface'), passKey = document.getElementById('passKey'), unlockBtn = document.getElementById('unlockBtn'), gateError = document.getElementById('gateError'), brainDumpArea = document.getElementById('brainDumpArea');
+        const tasks = ['t1','t2','t3','t4','t5','t6','t7','t8'];
+
+        // Access Gate Controller
+        unlockBtn.addEventListener('click', () => {
+            if (passKey.value.trim() === 'TAKEN_TODAY') {
+                authGate.style.display = 'none';
+                appInterface.style.opacity = '1';
+                appInterface.style.pointerEvents = 'all';
+                initializeDashboard();
+            } else { gateError.style.visibility = 'visible'; passKey.value = ''; }
+        });
+        passKey.addEventListener('focus', () => { gateError.style.visibility = 'hidden'; });
+
+        // 🧠 Sliding Panel Accordion Mechanism
+        function toggleAccordion(contentId) {
+            const content = document.getElementById(contentId);
+            const statusIdx = contentId.replace('content', '');
+            const statusLabel = document.getElementById('status' + statusIdx);
+            
+            // Close all other panels first to keep cognitive focus strictly isolated
+            document.querySelectorAll('.accordion-content').forEach(el => {
+                if (el.id !== contentId) {
+                    el.style.maxHeight = null;
+                    const otherIdx = el.id.replace('content', '');
+                    document.getElementById('status' + otherIdx).innerText = 'Closed';
+                }
+            });
+
+            if (content.style.maxHeight) {
+                content.style.maxHeight = null;
+                statusLabel.innerText = 'Closed';
+            } else {
+                content.style.maxHeight = content.scrollHeight + "px";
+                statusLabel.innerText = 'Active';
+                playSoftChime();
+            }
+        }
+
+        // 🚀 Disappearing Ink Wipe Controller
+        function wipeBrainDump() {
+            brainDumpArea.style.transition = 'all 0.3s ease';
+            brainDumpArea.style.opacity = '0';
+            brainDumpArea.style.transform = 'scale(0.95)';
+            
+            playWipeTone();
+
+            setTimeout(() => {
+                brainDumpArea.value = '';
+                localStorage.removeItem('adhd_brain_dump');
+                brainDumpArea.style.opacity = '1';
+                brainDumpArea.style.transform = 'scale(1)';
+            }, 300);
+        }
+
+        // 💾 Built-In Persistence Cache Framework
+        function initializeDashboard() {
+            const today = new Date().toDateString();
+            const savedDate = localStorage.getItem('adhdHubDate');
+
+            // Midnight Task Clearer Loop
+            if (savedDate !== today) {
+                tasks.forEach(id => localStorage.removeItem(id + '_done'));
+                localStorage.setItem('adhdHubDate', today);
+            }
+
+            // Restore Checkbox States
+            tasks.forEach(id => {
+                const el = document.getElementById(id);
+                if (localStorage.getItem(id + '_done') === 'true') {
+                    el.classList.add('done');
+                }
+            });
+
+            // Restore Brain Dump Text
+            const savedText = localStorage.getItem('adhd_brain_dump');
+            if (savedText) brainDumpArea.value = savedText;
+
+            // Live Text Observer to save data dynamically as they type
+            brainDumpArea.addEventListener('input', (e) => {
+                localStorage.setItem('adhd_brain_dump', e.target.value);
+            });
+        }
+
+        function toggleTask(id) {
+            const el = document.getElementById(id);
+            const isCompleted = el.classList.toggle('done');
+            localStorage.setItem(id + '_done', isCompleted);
+            
+            if (isCompleted) playSoftChime();
+        }
+
+        // 🔊 Pure Synth High-Volume Acoustic Feedback Engines
+        function playSoftChime() {
+            try {
+                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = audioCtx.createOscillator(), gain = audioCtx.createGain();
+                osc.type = 'triangle'; osc.frequency.setValueAtTime(523.25, audioCtx.currentTime); // High clean C note
+                gain.gain.setValueAtTime(0.12, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.1);
+                osc.connect(gain); gain.connect(audioCtx.destination);
+                osc.start(); osc.stop(audioCtx.currentTime + 0.1);
+            } catch (e) {}
+        }
+
+        function playWipeTone() {
+            try {
+                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = audioCtx.createOscillator(), gain = audioCtx.createGain();
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(220, audioCtx.currentTime); // Descending swoosh sound wave
+                osc.frequency.exponentialRampToValueAtTime(80, audioCtx.currentTime + 0.25);
+                gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.25);
+                osc.connect(gain); gain.connect(audioCtx.destination);
+                osc.start(); osc.stop(audioCtx.currentTime + 0.25);
+            } catch (e) {}
+        }
+
+        // Clock monitor interface cycle ring
+        setInterval(() => {
+            if (localStorage.getItem('adhdHubDate') !== new Date().toDateString()) {
+                initializeDashboard();
+            }
+        }, 30000);
+
+        window.onload = initializeDashboard;
+    </script>
+</body>
+</html>
